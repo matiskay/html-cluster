@@ -16,7 +16,7 @@ def cli():
 
 
 commands = [
-    'download_urls',
+    'download_html',
     'make_score_similarity_file',
     'make_graph'
 ]

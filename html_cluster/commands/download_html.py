@@ -15,13 +15,14 @@ from html_cluster.utils import file_name, is_html_page_from_string
 # url:
 # image:
 # Additional information:
-def download_urls(urls_file, output_directory):
+# TODO: Splash support: https://github.com/TeamHG-Memex/page-compare/blob/master/scrape.py
+def download_html(urls_file, output_directory):
     if not os.path.isfile(urls_file):
         click.echo('The {} file does not exits.'.format(urls_file))
         click.Context.exit(1)
 
     if not os.path.exists(output_directory):
-        os.makedirs('html_cluster_data')
+        os.makedirs(output_directory)
 
     with open(urls_file, 'r') as f:
         lines = f.readlines()
@@ -75,5 +76,6 @@ SHORT_HELP = 'Download the html from the urls and store it in a folder.'
 
 @click.command(help=HELP, short_help=SHORT_HELP)
 @click.argument('urls_file')
-def cli(urls_file):
-    download_urls(urls_file, HTML_CLUSTER_DATA_DIRECTORY)
+@click.option('output_directory', default=HTML_CLUSTER_DATA_DIRECTORY)
+def cli(urls_file, output_directory):
+    download_html(urls_file, output_directory)
