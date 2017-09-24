@@ -17,7 +17,7 @@ def cli():
 
 commands = [
     'download_urls',
-    # 'make_similarity_file',
+    'make_similarity_file',
     'generate_graph'
 ]
 

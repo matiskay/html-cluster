@@ -65,8 +65,13 @@ def download_urls(urls_file, output_directory):
             except Exception as e:
                 print('   --> Oh noes! {}'.format(e))
 
+# TODO: Add splash support.
+HELP = '''
+'''
 
-@click.command()
+SHORT_HELP = 'Download the html from the urls and store it in a folder.'
+
+@click.command(help=HELP, short_help=SHORT_HELP)
 @click.argument('urls_file')
 def cli(urls_file):
     download_urls(urls_file, HTML_CLUSTER_DATA_DIRECTORY)

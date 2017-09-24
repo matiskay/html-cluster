@@ -40,7 +40,7 @@ def generate_graph(similarity_file):
     print('}')
 
 
-@click.command()
+@click.command(short_help='Generate a Graphviz Dot file.')
 @click.argument('similarity_file')
 def cli(similarity_file):
     generate_graph(similarity_file)

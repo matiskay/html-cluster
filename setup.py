@@ -5,7 +5,7 @@ setup(
     name='html_cluster',
     version='0.1',
     # packages=find_packages(exclude=('tests', 'tests.*')),
-    # url='http://doc.scrapinghub.com/shub.html',
+    url='http://matiskay.com/code/html-cluster.html',
     description='html-cluster tool',
     # long_description=open('README.rst').read(),
     author='Edgar Marca',
