@@ -14,3 +14,11 @@ def get_base_path(url):
 
 def file_name(url, text):
     return get_base_path(url) + '.' + make_id(text)
+
+
+def similarity_color(similarity_value):
+    if 0 <= similarity_value < 50:
+        return 'red'
+    elif 50 <= similarity_value < 70:
+        return 'yellow'
+    return 'green'

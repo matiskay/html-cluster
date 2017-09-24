@@ -5,20 +5,8 @@ from itertools import combinations
 
 from html_similarity import similarity
 from html_cluster.settings import HTML_CLUSTER_DATA_DIRECTORY
-
-
-def validate_k(ctx, param, value):
-    if 0.0 <= value and value <= 1.0:
-        return value
-    raise click.BadParameter('The value of k must be between 0 and 1')
-
-
-def similarity_color(similarity_value):
-    if 0 <= similarity_value and similarity_value < 50:
-        return 'red'
-    elif 50 <= similarity_value and similarity_value < 70:
-        return 'yellow'
-    return 'green'
+from html_cluster.validators import validate_k
+from html_cluster.utils import similarity_color
 
 
 def make_similarity_file(threshold, structural_weight, similarity_file_output):
