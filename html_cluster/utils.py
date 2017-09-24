@@ -10,6 +10,11 @@ def is_html_page(file_path):
         html = file_html.read()
         return lxml.html.fromstring(html).find('.//*') is not None
 
+
+def is_html_page_from_string(html):
+    return lxml.html.fromstring(html).find('.//*') is not None
+
+
 def make_id(text):
     m = md5(text.encode('utf-8'))
     return m.hexdigest()[:5]

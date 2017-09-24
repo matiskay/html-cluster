@@ -3,7 +3,7 @@ import os
 import click
 import requests
 from html_cluster.settings import HTML_CLUSTER_DATA_DIRECTORY
-from html_cluster.utils import file_name
+from html_cluster.utils import file_name, is_html_page_from_string
 
 # This must be the default. The user should add the file name he wants
 # The name of the directory should depend on the name of the file.
@@ -47,15 +47,20 @@ def download_urls(urls_file, output_directory):
                 html = r.text
 
                 if r.status_code == requests.codes.ok:
-                    html_file_name = '{}/{}.html'.format(output_directory, file_name(url, html))
+                    html_file_path = '{}/{}.html'.format(output_directory, file_name(url, html))
                     click.echo(
                         click.style(
-                            '  --> Saving {}'.format(html_file_name), fg='green'
+                            '  --> Saving {}'.format(html_file_path), fg='green'
                         )
                     )
 
-                    with open(html_file_name, 'w') as html_file:
-                        html_file.write(html)
+                    if is_html_page_from_string(html):
+                        with open(html_file_path, 'w') as html_file:
+                            html_file.write(html)
+                    else:
+                        click.echo(
+                            click.style('  --> The url {} is not an html file'.format(url), fg='red')
+                        )
                 else:
                     click.echo(
                         click.style(
