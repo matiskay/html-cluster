@@ -15,25 +15,22 @@ def make_similarity_file(threshold, structural_weight, similarity_file_output):
     results = []
 
     html_paths = glob.glob('{}/*.html'.format(HTML_CLUSTER_DATA_DIRECTORY))
-    for file_1, file_2 in combinations(html_paths, 2):
-        print('Calculating the similarity of {} and {}'.format(file_1, file_2))
-        html_1 = open(file_1).read()
-        html_2 = open(file_2).read()
-        # Recieve k as paramenter
-        similarity_value = similarity(html_1, html_2, k=structural_weight) * 100
-        # Use colors for this.
-        # 0 <= similarity < 50
-        # 50 <= similarity < 70
-        # 70 <= similarity <= 100
-        click.echo('   The similarity between them is ' + click.style('{0:.2g}%'.format(similarity_value), fg=similarity_color(similarity_value)))
+    for file_path_1, file_path_2 in combinations(html_paths, 2):
+        print('Calculating the similarity of {} and {}'.format(file_path_1, file_path_2))
+        with open(file_path_1) as file_1, open(file_path_2) as file_2:
+            html_1 = file_1.read()
+            html_2 = file_2.read()
 
-        # Default 55: Recieve this as paramter.
-        if similarity_value > threshold:
-            results.append({
-                'path1': file_1,
-                'path2': file_2,
-                'similarity': similarity_value
-            })
+            similarity_value = similarity(html_1, html_2, k=structural_weight) * 100
+            click.echo('   The similarity between them is ' + click.style('{0:.2g}%'.format(similarity_value), fg=similarity_color(similarity_value)))
+
+            # Default 55: Recieve this as paramter.
+            if similarity_value >= threshold:
+                results.append({
+                    'path1': file_1,
+                    'path2': file_2,
+                    'similarity': similarity_value
+                })
 
     with open(similarity_file_output, 'w') as json_out:
         json.dump(results, json_out, indent=4)
