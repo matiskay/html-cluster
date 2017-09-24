@@ -1,12 +1,32 @@
 import os
+import json
+import base64
 
 import click
 import requests
-from html_cluster.settings import HTML_CLUSTER_DATA_DIRECTORY
+from html_cluster.settings import HTML_CLUSTER_DATA_DIRECTORY, SPLASH_URL
 from html_cluster.utils import file_name, is_html_page_from_string
 
 # This must be the default. The user should add the file name he wants
 # The name of the directory should depend on the name of the file.
+
+
+def splash_request(url, splash_url):
+    splash_url = splash_url.rstrip('/') + '/render.json'
+    headers = {'content-type': 'application/json'}
+    params = {
+        'html': 1,
+        'png': 1,
+        'width': 600,
+        'height': 800,
+        'timeout': 10,
+        'images': 0,
+        'url': url
+    }
+
+    return requests.get(splash_url, headers=headers, params=params)
+
+
 
 # Check if the url is a valid url.
 # TODO: Display stats about the download
@@ -16,7 +36,8 @@ from html_cluster.utils import file_name, is_html_page_from_string
 # image:
 # Additional information:
 # TODO: Splash support: https://github.com/TeamHG-Memex/page-compare/blob/master/scrape.py
-def download_html(urls_file, output_directory):
+# Avoid urls by extension
+def download_html(urls_file, output_directory, is_splash_request_enable=False, splash_url=SPLASH_URL):
     if not os.path.isfile(urls_file):
         click.echo('The {} file does not exits.'.format(urls_file))
         click.Context.exit(1)
@@ -41,20 +62,32 @@ def download_html(urls_file, output_directory):
                 )
             )
             try:
-                r = requests.get(url)
+                if is_splash_request_enable:
+                    r = splash_request(url, SPLASH_URL)
+                else:
+                    r = requests.get(url)
                 html = r.text
 
                 if r.status_code == requests.codes.ok:
-                    html_file_path = '{}/{}.html'.format(output_directory, file_name(url, html))
+                    html_file_name = file_name(url, html)
                     click.echo(
                         click.style(
-                            '  --> Saving {}'.format(html_file_path), fg='green'
+                            '  --> Saving {}'.format(html_file_name), fg='green'
                         )
                     )
 
+                    if is_splash_request_enable:
+                        json_response = json.loads(r.text)
+                        html = json_response['html']
+
                     if is_html_page_from_string(html):
-                        with open(html_file_path, 'w') as html_file:
+                        with open('{}/{}.html'.format(output_directory, html_file_name), 'w') as html_file:
                             html_file.write(html)
+
+                        if is_splash_request_enable:
+                            with open('{}/{}.png'.format(output_directory, html_file_name), 'wb') as png_file:
+                                png_file.write(base64.b64decode(json_response['png']))
+
                     else:
                         click.echo(
                             click.style('  --> The url {} is not an html file'.format(url), fg='red')
@@ -76,6 +109,12 @@ SHORT_HELP = 'Download the html from the urls and store it in a folder.'
 
 @click.command(help=HELP, short_help=SHORT_HELP)
 @click.argument('urls_file')
-@click.option('output_directory', default=HTML_CLUSTER_DATA_DIRECTORY)
-def cli(urls_file, output_directory):
-    download_html(urls_file, output_directory)
+@click.option('--output-directory', default=HTML_CLUSTER_DATA_DIRECTORY)
+@click.option('--splash-enabled/--no-splash-enabled', default=False)
+@click.option('--splash-url', default=SPLASH_URL)
+# @click.option('--splash-enabled/--no-splash-enabled', default=False, help='Enable Splash')
+# @click.option('--splash-url', default=SPLASH_URL)
+# def cli(urls_file, output_directory, splash_enabled, splash_url):
+def cli(urls_file, output_directory, splash_enabled, splash_url):
+    # download_html(urls_file, output_directory, is_splash_request_enable, splash_url)
+    download_html(urls_file, output_directory, splash_enabled, splash_url)

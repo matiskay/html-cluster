@@ -1,1 +1,2 @@
-HTML_CLUSTER_DATA_DIRECTORY = 'html_cluster_data'
+HTML_CLUSTER_DATA_DIRECTORY = 'html-cluster-data'
+SPLASH_URL = 'http://localhost:8050'
