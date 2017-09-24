@@ -1,7 +1,14 @@
 from urllib.parse import urlparse
 from hashlib import md5
+
+import lxml.html
 # Check if the html is an html page.
 
+
+def is_html_page(file_path):
+    with open(file_path) as file_html:
+        html = file_html.read()
+        return lxml.html.fromstring(html).find('.//*') is not None
 
 def make_id(text):
     m = md5(text.encode('utf-8'))
