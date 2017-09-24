@@ -8,9 +8,7 @@ from html_cluster.utils import file_name, is_html_page_from_string
 # This must be the default. The user should add the file name he wants
 # The name of the directory should depend on the name of the file.
 
-
-
-# TODO: Check if the resource is a html page. :D
+# Check if the url is a valid url.
 # TODO: Display stats about the download
 # Get splash support using docker so we can store the
 # id:
@@ -19,7 +17,7 @@ from html_cluster.utils import file_name, is_html_page_from_string
 # Additional information:
 def download_urls(urls_file, output_directory):
     if not os.path.isfile(urls_file):
-        click.echo('The {} does not exits.'.format(urls_file))
+        click.echo('The {} file does not exits.'.format(urls_file))
         click.Context.exit(1)
 
     if not os.path.exists(output_directory):
@@ -34,7 +32,6 @@ def download_urls(urls_file, output_directory):
             url = line.replace('\n', '').strip()
             url = url.strip()
             if not url:
-                # Print empty url
                 continue
 
             click.echo(

@@ -2,6 +2,7 @@ import json
 
 import click
 
+# Read this: https://www.worthe-it.co.za/programming/2017/09/19/quick-introduction-to-graphviz.html
 # python html_cluster.py generate_graph > graph.dot
 # Remove the prefix directory. Generate the title as the name of the folder.
 # neato -O -Tpng graph.dot
@@ -20,6 +21,7 @@ def generate_graph(similarity_file):
         hosts_used.add(host2)
 
         # TODO: Improve this part
+        # weight
         edges[host1, host2] = score / 30
 
     print('graph {')

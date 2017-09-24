@@ -1,4 +1,5 @@
 import click
+import glob
 import json
 from itertools import combinations
 
@@ -9,9 +10,7 @@ from html_cluster.validators import validate_k
 from html_cluster.utils import similarity_color
 
 
-def make_similarity_file(threshold, structural_weight, similarity_file_output):
-    # TODO: Identify the content-type. You are only interested in html
-    import glob
+def make_score_similarity_file(threshold, structural_weight, similarity_file_output):
     results = []
 
     html_paths = glob.glob('{}/*.html'.format(HTML_CLUSTER_DATA_DIRECTORY))
@@ -21,25 +20,25 @@ def make_similarity_file(threshold, structural_weight, similarity_file_output):
             html_1 = file_1.read()
             html_2 = file_2.read()
 
-            similarity_value = similarity(html_1, html_2, k=structural_weight) * 100
-            click.echo('   The similarity between them is ' + click.style('{0:.2g}%'.format(similarity_value), fg=similarity_color(similarity_value)))
+            similarity_score = similarity(html_1, html_2, k=structural_weight) * 100
+            click.echo('   The similarity between them is ' + click.style('{0:.2g}%'.format(similarity_score), fg=similarity_color(similarity_score)))
 
             # Default 55: Recieve this as paramter.
-            if similarity_value >= threshold:
+            if similarity_score >= threshold:
                 results.append({
-                    'path1': file_1,
-                    'path2': file_2,
-                    'similarity': similarity_value
+                    'path1': file_path_1,
+                    'path2': file_path_2,
+                    'similarity': similarity_score
                 })
 
     with open(similarity_file_output, 'w') as json_out:
         json.dump(results, json_out, indent=4)
 
 
-# python html_cluster.py make_similarity_file --structural-weight=0.3
+# python html_cluster.py make_score_similarity_file --structural-weight=0.3
 @click.command(help='', short_help='Create a similarity file')
 @click.option('--threshold', default=55, help='', type=int)
 @click.option('--structural-weight', default=0.5, help='', type=float, callback=validate_k)
-@click.option('--similarity_file_output', default='similarity.json', help='')
+@click.option('--similarity_file_output', default='similarity_score.json', help='')
 def cli(threshold, structural_weight, similarity_file_output):
-    make_similarity_file(threshold, structural_weight, similarity_file_output)
+    make_score_similarity_file(threshold, structural_weight, similarity_file_output)
