@@ -17,8 +17,8 @@ def splash_request(url, splash_url):
     params = {
         'html': 1,
         'png': 1,
-        'width': 600,
-        'height': 800,
+        'width': 400,
+        'height': 300,
         'timeout': 10,
         'images': 0,
         'url': url

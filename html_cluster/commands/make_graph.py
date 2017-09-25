@@ -6,7 +6,7 @@ import click
 # python html_cluster.py generate_graph > graph.dot
 # Remove the prefix directory. Generate the title as the name of the folder.
 # neato -O -Tpng graph.dot
-def generate_graph(similarity_file):
+def generate_graph(similarity_file, threshold=55):
     edges = dict()
     hosts_used = set()
 
@@ -15,6 +15,9 @@ def generate_graph(similarity_file):
 
     score_dict = {s['similarity']: (s['path1'], s['path2']) for s in scores}
     for score, paths in score_dict.items():
+        if score < threshold:
+            continue
+
         host1 = paths[0]
         host2 = paths[1]
         hosts_used.add(host1)
@@ -22,7 +25,7 @@ def generate_graph(similarity_file):
 
         # TODO: Improve this part
         # weight
-        edges[host1, host2] = score / 30
+        edges[host1, host2] = (score - threshold) / 2
 
     print('graph {')
     print('  graph [overlap=scale, splines=true];')
@@ -37,12 +40,13 @@ def generate_graph(similarity_file):
     print()
 
     for host in hosts_used:
-        print('  "%s" [label="%s"]' % (host, host))
+        print('  "{host}" [label="{host}", image="{image_path}.png"]'.format(host=host, image_path=host.replace('.html', '')))
 
     print('}')
 
-
+# Validate Threshold
 @click.command(short_help='Generate a Graphviz Dot file.')
 @click.argument('similarity_file')
-def cli(similarity_file):
-    generate_graph(similarity_file)
+@click.option('--threshold', default=55)
+def cli(similarity_file, threshold):
+    generate_graph(similarity_file, threshold)

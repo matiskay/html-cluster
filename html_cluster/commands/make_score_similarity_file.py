@@ -10,11 +10,12 @@ from html_cluster.validators import validate_k
 from html_cluster.utils import similarity_color
 
 
-def make_score_similarity_file(threshold, structural_weight, similarity_file_output):
+def make_score_similarity_file(structural_weight, similarity_file_output):
     results = []
 
     html_paths = glob.glob('{}/*.html'.format(HTML_CLUSTER_DATA_DIRECTORY))
     for file_path_1, file_path_2 in combinations(html_paths, 2):
+        # Remove tht data directory
         print('Calculating the similarity of {} and {}'.format(file_path_1, file_path_2))
         with open(file_path_1) as file_1, open(file_path_2) as file_2:
             html_1 = file_1.read()
@@ -24,12 +25,12 @@ def make_score_similarity_file(threshold, structural_weight, similarity_file_out
             click.echo('   The similarity between them is ' + click.style('{0:.2g}%'.format(similarity_score), fg=similarity_color(similarity_score)))
 
             # Default 55: Recieve this as paramter.
-            if similarity_score >= threshold:
-                results.append({
-                    'path1': file_path_1,
-                    'path2': file_path_2,
-                    'similarity': similarity_score
-                })
+            # if similarity_score >= threshold:
+            results.append({
+                'path1': file_path_1,
+                'path2': file_path_2,
+                'similarity': similarity_score
+            })
 
     with open(similarity_file_output, 'w') as json_out:
         json.dump(results, json_out, indent=4)
@@ -37,8 +38,7 @@ def make_score_similarity_file(threshold, structural_weight, similarity_file_out
 
 # python html_cluster.py make_score_similarity_file --structural-weight=0.3
 @click.command(help='', short_help='Create a similarity file')
-@click.option('--threshold', default=55, help='', type=int)
 @click.option('--structural-weight', default=0.5, help='', type=float, callback=validate_k)
 @click.option('--similarity_file_output', default='similarity_score.json', help='')
-def cli(threshold, structural_weight, similarity_file_output):
-    make_score_similarity_file(threshold, structural_weight, similarity_file_output)
+def cli(structural_weight, similarity_file_output):
+    make_score_similarity_file(structural_weight, similarity_file_output)
