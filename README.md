@@ -17,7 +17,7 @@ pip install html-cluster
 1. Download HTML form a list of files.
 
 ```
-html-cluster download-html
+html-cluster download-html urls.txt
 ```
 
 2. Create a similarity score file.

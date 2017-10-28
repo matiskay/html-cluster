@@ -36,7 +36,6 @@ def splash_request(url, splash_url):
     return requests.get(splash_url, headers=headers, params=params)
 
 
-# TODO: Avoid by content-type. Only Allow HTML
 def make_request(url, **kwargs):
     if 'splash' in kwargs and kwargs['splash']:
         if 'splash_url' in kwargs:
@@ -56,25 +55,29 @@ def download_html(urls_file, output_directory, is_splash_request_enable=False, s
 
     urls = FileUrlsReader(urls_file).read()
     for url in urls:
-        click.echo(
-            click.style(
-                'Downloading {}'.format(url), blink=True, bold=True
-            )
-        )
+        click.echo(click.style('Downloading {}'.format(url)))
         try:
-            r = make_request(url, splash=is_splash_request_enable, splash_url=splash_url)
+            r = make_request(
+                url, splash=is_splash_request_enable, splash_url=splash_url
+            )
             html = r.text
+
+            if 'text/html' not in r.headers['Content-Type']:
+                click.echo(
+                    click.style('  --> The url {} is not an html file. Content-Type: {}'.format(url, r.headers['Content-Type']), fg='red')
+                )
+                continue
 
             if r.status_code == requests.codes.ok:
                 html_file_name = file_name(url, html)
                 click.echo(
                     click.style(
-                        '  --> Saving {}'.format(html_file_name), fg='green'
+                        '  --> Saving {}/{}'.format(output_directory, html_file_name), fg='green'
                     )
                 )
 
                 if is_splash_request_enable:
-                    json_response = json.loads(r.text)
+                    json_response = json.loads(html)
                     html = json_response['html']
 
                 if is_html_page_from_string(html):
@@ -87,7 +90,7 @@ def download_html(urls_file, output_directory, is_splash_request_enable=False, s
 
                 else:
                     click.echo(
-                        click.style('  --> The url {} is not an html file'.format(url), fg='red')
+                        click.style('  --> The url {} is not a html file'.format(url), fg='red')
                     )
             else:
                 click.echo(
