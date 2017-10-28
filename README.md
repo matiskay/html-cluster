@@ -2,6 +2,14 @@
 
 A command line tool to cluster html pages based on structural and style similarity.
 
+## Install
+
+The quick way:
+
+```
+pip install html-cluster
+```
+
 ## How it works
 
 1. Download HTML form a list of files.
