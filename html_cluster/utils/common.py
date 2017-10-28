@@ -50,11 +50,8 @@ def is_url(url):
         return True
     return False
 
-# This class parse a file
-# Only valid urls
-# Non spaces
-class FileUrlsReader:
 
+class FileUrlsReader:
     def __init__(self, file_path):
         self.file_path = file_path
 

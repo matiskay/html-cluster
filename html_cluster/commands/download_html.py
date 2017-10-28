@@ -4,17 +4,12 @@ import base64
 
 import click
 import requests
-from html_cluster.settings import HTML_CLUSTER_DATA_DIRECTORY, SPLASH_URL, USER_AGENT
+from html_cluster.settings import (
+    HTML_CLUSTER_DATA_DIRECTORY, SPLASH_URL, USER_AGENT, SPLASH_TIMEOUT
+)
 from html_cluster.utils import file_name, is_html_page_from_string
 
-# TODO: Add default user-agent
 
-# This must be the default. The user should add the file name he wants
-# The name of the directory should depend on the name of the file.
-
-
-# Increase the timeout to 30 seconds
-# This should be down in the splash requests and the splash server.
 def splash_request(url, splash_url):
     splash_url = splash_url.rstrip('/') + '/render.json'
     headers = {
@@ -26,7 +21,7 @@ def splash_request(url, splash_url):
         'png': 1,
         'width': 400,
         'height': 300,
-        'timeout': 10,
+        'timeout': SPLASH_TIMEOUT,
         'images': 0,
         'url': url
     }
@@ -34,6 +29,10 @@ def splash_request(url, splash_url):
     return requests.get(splash_url, headers=headers, params=params)
 
 
+def make_request(url, **kwargs):
+    if 'splash' in kwargs and kwargs['splash']:
+        return splash_request(url, SPLASH_URL)
+    return requests.get(url, headers={'user-agent': USER_AGENT})
 
 # Check if the url is a valid url.
 # TODO: Display stats about the download
@@ -69,12 +68,7 @@ def download_html(urls_file, output_directory, is_splash_request_enable=False, s
                 )
             )
             try:
-                # The idea here is to create a client which handle this.
-                # Create the same interface. A dict with the information.
-                if is_splash_request_enable:
-                    r = splash_request(url, SPLASH_URL)
-                else:
-                    r = requests.get(url, headers={'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'})
+                r = make_request(url, splash=is_splash_request_enable)
                 html = r.text
 
                 if r.status_code == requests.codes.ok:
