@@ -18,3 +18,19 @@ def is_url(url):
     if regex.match(url):
         return True
     return False
+
+
+class FileUrlsReader:
+    def __init__(self, file_path):
+        self.file_path = file_path
+
+    def read(self):
+        with open(self.file_path, 'r') as f:
+            lines = f.readlines()
+
+            for line in lines:
+                url = line.replace('\n', '').strip()
+                url = url.strip()
+                if not is_url(url):
+                    continue
+                yield url
