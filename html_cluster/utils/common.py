@@ -1,14 +1,15 @@
+import codecs
+
 from urllib.parse import urlparse
 from hashlib import md5
 
 import lxml.html
-# Check if the html is an html page.
 
 from html_cluster.utils.url import is_url
 
 
 def is_html_page(file_path):
-    with open(file_path) as file_html:
+    with codecs.open(file_path, encoding='utf-8', errors='ignore') as file_html:
         html = file_html.read()
         return lxml.html.fromstring(html).find('.//*') is not None
 
