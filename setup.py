@@ -1,13 +1,12 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 setup(
     name='html_cluster',
     version='0.1',
-    # packages=find_packages(exclude=('tests', 'tests.*')),
-    url='http://matiskay.com/code/html-cluster.html',
-    description='html-cluster tool',
-    # long_description=open('README.rst').read(),
+    url='https://github.com/matiskay/html-cluster',
+    description='A command line tool to cluster html files',
+    long_description='',
     author='Edgar Marca',
     author_email='matiskay@gmail.com',
     maintainer='Edgar Marca',
@@ -21,10 +20,11 @@ setup(
     install_requires=[
         'requests',
         'click',
+        'html-similarity',
     ],
     classifiers=[
-        'Natural Language :: English',
         'License :: OSI Approved :: BSD License',
+        'Environment :: Console',
         'Programming Language :: Python :: 3.6',
         'Operating System :: OS Independent',
         'Environment :: Console',
