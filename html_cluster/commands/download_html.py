@@ -66,7 +66,12 @@ def download_html(urls_file, output_directory, is_splash_request_enable=False, s
 
             if 'text/html' not in r.headers['Content-Type']:
                 click.echo(
-                    click.style('  --> The url {} is not an html file. Content-Type: {}'.format(url, r.headers['Content-Type']), fg='red')
+                    click.style(
+                        '  --> The url {} is not an html file. Content-Type: {}'.format(
+                            url, r.headers['Content-Type']
+                        ),
+                        fg='red'
+                    )
                 )
                 continue
 
