@@ -1,5 +1,7 @@
 # HTML Cluster
 
+[![Build Status](https://travis-ci.org/matiskay/html-cluster.svg?branch=master)](https://travis-ci.org/matiskay/html-cluster)
+
 A command line tool to cluster html pages based on structural and style similarity.
 
 ## Install
