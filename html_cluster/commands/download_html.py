@@ -16,7 +16,7 @@ from html_cluster.utils.url import FileUrlsReader
 HELP = '''
 '''
 
-SHORT_HELP = 'Download the html from the urls and store it in a folder.'
+SHORT_HELP = 'Download html from the urls and store it in a folder.'
 
 
 def splash_request(url, splash_url):
