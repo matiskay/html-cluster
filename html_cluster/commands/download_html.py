@@ -4,6 +4,8 @@ import base64
 
 import click
 import requests
+import htmlmin
+
 from html_cluster.settings import (
     HTML_CLUSTER_DATA_DIRECTORY, SPLASH_URL, USER_AGENT, SPLASH_TIMEOUT
 )
@@ -69,7 +71,7 @@ def download_html(urls_file, output_directory, is_splash_request_enable=False, s
                 continue
 
             if r.status_code == requests.codes.ok:
-                html_file_name = file_name(url, html)
+                html_file_name = file_name(url)
                 click.echo(
                     click.style(
                         '  --> Saving {}/{}'.format(output_directory, html_file_name), fg='green'
@@ -82,7 +84,7 @@ def download_html(urls_file, output_directory, is_splash_request_enable=False, s
 
                 if is_html_page_from_string(html):
                     with open('{}/{}.html'.format(output_directory, html_file_name), 'w') as html_file:
-                        html_file.write(html)
+                        html_file.write(htmlmin.minify(html, remove_comments=True))
 
                     if is_splash_request_enable:
                         with open('{}/{}.png'.format(output_directory, html_file_name), 'wb') as png_file:

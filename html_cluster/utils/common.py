@@ -11,8 +11,8 @@ def get_base_path(url):
     return urlparse(url).netloc
 
 
-def file_name(url, text):
-    return get_base_path(url) + '.' + make_id(text)
+def file_name(url):
+    return get_base_path(url) + '.' + make_id(url)
 
 
 def similarity_color(similarity_value):
