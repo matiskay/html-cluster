@@ -5,4 +5,4 @@ install:
   - pip install -r requirements-dev.txt
 script:
   - pytest -v tests/
-  - flake8 html_similarity
+  - flake8 html_cluster

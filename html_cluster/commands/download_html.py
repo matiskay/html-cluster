@@ -7,7 +7,7 @@ import requests
 from html_cluster.settings import (
     HTML_CLUSTER_DATA_DIRECTORY, SPLASH_URL, USER_AGENT, SPLASH_TIMEOUT
 )
-from html_cluster.utils import file_name, is_html_page_from_string
+from html_cluster.utils.common import file_name, is_html_page_from_string
 
 
 def splash_request(url, splash_url):
@@ -33,6 +33,7 @@ def make_request(url, **kwargs):
     if 'splash' in kwargs and kwargs['splash']:
         return splash_request(url, SPLASH_URL)
     return requests.get(url, headers={'user-agent': USER_AGENT})
+
 
 # Check if the url is a valid url.
 # TODO: Display stats about the download
@@ -104,11 +105,13 @@ def download_html(urls_file, output_directory, is_splash_request_enable=False, s
             except Exception as e:
                 print('   --> Oh noes! {}'.format(e))
 
+
 # TODO: Add splash support.
 HELP = '''
 '''
 
 SHORT_HELP = 'Download the html from the urls and store it in a folder.'
+
 
 @click.command(help=HELP, short_help=SHORT_HELP)
 @click.argument('urls_file')

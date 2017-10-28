@@ -9,7 +9,7 @@ from itertools import combinations
 from html_similarity import similarity
 from html_cluster.settings import HTML_CLUSTER_DATA_DIRECTORY
 from html_cluster.validators import validate_k
-from html_cluster.utils import similarity_color
+from html_cluster.utils.common import similarity_color
 
 
 def make_score_similarity_file(structural_weight, similarity_file_output):
@@ -25,7 +25,11 @@ def make_score_similarity_file(structural_weight, similarity_file_output):
             html_2 = file_2.read()
 
             similarity_score = similarity(html_1, html_2, k=structural_weight) * 100
-            click.echo('   The similarity between them is ' + click.style('{0:.2g}%'.format(similarity_score), fg=similarity_color(similarity_score)))
+            click.echo(
+                '   The similarity between them is ' + click.style('{0:.2g}%'.format(
+                    similarity_score), fg=similarity_color(similarity_score)
+                )
+            )
 
             # Default 55: Recieve this as paramter.
             # if similarity_score >= threshold:
