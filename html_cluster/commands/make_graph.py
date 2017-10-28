@@ -3,10 +3,6 @@ import json
 import click
 
 
-# Read this: https://www.worthe-it.co.za/programming/2017/09/19/quick-introduction-to-graphviz.html
-# python html_cluster.py generate_graph > graph.dot
-# Remove the prefix directory. Generate the title as the name of the folder.
-# neato -O -Tpng graph.dot
 def generate_graph(similarity_file, threshold=55):
     edges = dict()
     hosts_used = set()
@@ -41,8 +37,7 @@ def generate_graph(similarity_file, threshold=55):
     print()
 
     for host in hosts_used:
-        # print('  "{host}" [label="{host}", image="{image_path}.png"]'.format(host=host, image_path=host.replace('.html', ''))) # NOQA
-        print('  "{host}" [label="{host}"]'.format(host=host))
+        print('  "{host}" [label="{host}", image="{image_path}.png"]'.format(host=host, image_path=host.replace('.html', ''))) # NOQA
 
     print('}')
 

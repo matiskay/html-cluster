@@ -23,7 +23,7 @@ html-cluster download-html urls.txt
 2. Create a similarity score file.
 
 ```
-html-cluster make-score-similarity-file
+html-cluster make-score-similarity-file --structural-weight=0.3
 ```
 
 3. Create the graph dot file

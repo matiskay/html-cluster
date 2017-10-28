@@ -3,9 +3,6 @@ import glob
 import json
 from itertools import combinations
 
-# TODO: Paralelization https://www.ploggingdev.com/2017/01/multiprocessing-and-multithreading-in-python-3/
-
-
 from html_similarity import similarity
 from html_cluster.settings import HTML_CLUSTER_DATA_DIRECTORY
 from html_cluster.validators import validate_k
@@ -18,7 +15,7 @@ def make_score_similarity_file(structural_weight, similarity_file_output):
     html_paths = glob.glob('{}/*.html'.format(HTML_CLUSTER_DATA_DIRECTORY))
 
     for file_path_1, file_path_2 in combinations(html_paths, 2):
-        # Remove tht data directory
+        # TODO: Remove the data directory
         print('Calculating the similarity of {} and {}'.format(file_path_1, file_path_2))
         with open(file_path_1) as file_1, open(file_path_2) as file_2:
             html_1 = file_1.read()
@@ -30,9 +27,6 @@ def make_score_similarity_file(structural_weight, similarity_file_output):
                     similarity_score), fg=similarity_color(similarity_score)
                 )
             )
-
-            # Default 55: Recieve this as paramter.
-            # if similarity_score >= threshold:
             results.append({
                 'path1': file_path_1,
                 'path2': file_path_2,
@@ -43,7 +37,6 @@ def make_score_similarity_file(structural_weight, similarity_file_output):
         json.dump(results, json_out, indent=4)
 
 
-# python html_cluster.py make_score_similarity_file --structural-weight=0.3
 @click.command(help='', short_help='Create a similarity file')
 @click.option('--structural-weight', default=0.5, help='', type=float, callback=validate_k)
 @click.option('--similarity_file_output', default='similarity_score.json', help='')
