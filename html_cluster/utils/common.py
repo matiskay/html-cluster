@@ -1,9 +1,10 @@
-import re
 from urllib.parse import urlparse
 from hashlib import md5
 
 import lxml.html
 # Check if the html is an html page.
+
+from html_cluster.utils.url import is_url
 
 
 def is_html_page(file_path):
@@ -35,20 +36,6 @@ def similarity_color(similarity_value):
     elif 50 <= similarity_value < 70:
         return 'yellow'
     return 'green'
-
-
-def is_url(url):
-    regex = re.compile(
-        r'^(?:http|ftp)s?://' # http:// or https://
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
-        r'localhost|' #localhost...
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
-        r'(?::\d+)?' # optional port
-        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-
-    if regex.match(url):
-        return True
-    return False
 
 
 class FileUrlsReader:
