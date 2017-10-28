@@ -1,5 +1,5 @@
 import os
-from html_cluster.utils.common import is_html_page
+from html_cluster.utils.html import is_html_page
 
 tests_datadir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data')
 
