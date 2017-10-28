@@ -4,7 +4,7 @@ import base64
 
 import click
 import requests
-from html_cluster.settings import HTML_CLUSTER_DATA_DIRECTORY, SPLASH_URL
+from html_cluster.settings import HTML_CLUSTER_DATA_DIRECTORY, SPLASH_URL, USER_AGENT
 from html_cluster.utils import file_name, is_html_page_from_string
 
 # TODO: Add default user-agent
@@ -18,9 +18,9 @@ from html_cluster.utils import file_name, is_html_page_from_string
 def splash_request(url, splash_url):
     splash_url = splash_url.rstrip('/') + '/render.json'
     headers = {
-            'content-type': 'application/json',
-            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
-            }
+        'content-type': 'application/json',
+        'user-agent': USER_AGENT
+    }
     params = {
         'html': 1,
         'png': 1,
