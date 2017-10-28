@@ -40,7 +40,8 @@ def generate_graph(similarity_file, threshold=55):
     print()
 
     for host in hosts_used:
-        print('  "{host}" [label="{host}", image="{image_path}.png"]'.format(host=host, image_path=host.replace('.html', '')))
+        #print('  "{host}" [label="{host}", image="{image_path}.png"]'.format(host=host, image_path=host.replace('.html', '')))
+        print('  "{host}" [label="{host}"]'.format(host=host))
 
     print('}')
 

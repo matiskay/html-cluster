@@ -3,6 +3,8 @@ import glob
 import json
 from itertools import combinations
 
+# TODO: Paralelization https://www.ploggingdev.com/2017/01/multiprocessing-and-multithreading-in-python-3/
+
 
 from html_similarity import similarity
 from html_cluster.settings import HTML_CLUSTER_DATA_DIRECTORY
@@ -14,6 +16,7 @@ def make_score_similarity_file(structural_weight, similarity_file_output):
     results = []
 
     html_paths = glob.glob('{}/*.html'.format(HTML_CLUSTER_DATA_DIRECTORY))
+
     for file_path_1, file_path_2 in combinations(html_paths, 2):
         # Remove tht data directory
         print('Calculating the similarity of {} and {}'.format(file_path_1, file_path_2))

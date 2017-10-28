@@ -1,23 +1,30 @@
-## Development
+# HTML Cluster
+
+A command line tool that relies on [html-similarity](https://github.com/matiskay/html-similarity)
+package to cluster html pages.
+
+### How it works
+
+1. Download HTML form a list of files.
 
 ```
-export PYTHONPATH=/Users/matiskay/labs/html-cluster
+html-cluster download-html
 ```
 
-### Ideas
-The whole idea is to make the calculation using a set of defined templates.
+2. Create a similarity score file.
 
-template_1
-template_2
-template_3
-.
-.
-.
-template_n
+```
+html-cluster make-score-similarity-file
+```
 
-page
+3. Create the graph dot file
 
-= label
+```
+html-cluster make-graph > graph.dot
+```
 
-Number of comparison: C^{201}_{2}
-2010
+4. Render the image
+
+```
+neato -O -Tpng graph.dot
+```
