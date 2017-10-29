@@ -63,4 +63,4 @@ docker run -p 5023:5023 -p 8050:8050 -p 8051:8051 scrapinghub/splash
 
 ### Example 2 without using Splash. Default behaviour
 
-![Example 3](assets/example-3.jpg)
+![Example 3](assets/example-3.png)
