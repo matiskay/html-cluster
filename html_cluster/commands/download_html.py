@@ -60,6 +60,9 @@ def extract_html(url, splash, splash_url):
 
         html = r.text
 
+        if r.status_code not in ALLOW_STATUS_CODE:
+            raise Exception('The status code of url: {} is {}'.format(url, r.status_code))
+
         if splash:
             if 'application/json' not in r.headers['Content-Type']:
                 raise Exception('The content type of url: {} is {}'.format(url, r.headers['Content-Type']))
@@ -75,9 +78,6 @@ def extract_html(url, splash, splash_url):
         else:
             if 'text/html' not in r.headers['Content-Type']:
                 raise Exception('The content type of url: {} is {}'.format(url, r.headers['Content-Type']))
-
-        if r.status_code not in ALLOW_STATUS_CODE:
-            raise Exception('The status code of url: {} is {}'.format(url, r.status_code))
 
     except Exception as e:
         error = str(e)
