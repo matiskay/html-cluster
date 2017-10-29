@@ -11,6 +11,7 @@ from html_cluster.settings import (
 )
 from html_cluster.utils.common import get_file_name
 from html_cluster.utils.url import FileUrlsReader
+from html_cluster.utils.html import is_html_page_from_string
 
 HELP = '''
 '''
@@ -57,18 +58,27 @@ def extract_html(url, splash, splash_url):
             url, splash=splash, splash_url=splash_url
         )
 
-        if 'text/html' not in r.headers['Content-Type']:
-            raise Exception('The content type of url: {} is {}'.format(url, r.headers['Content-Type']))
+        html = r.text
+
+        if splash:
+            if 'application/json' not in r.headers['Content-Type']:
+                raise Exception('The content type of url: {} is {}'.format(url, r.headers['Content-Type']))
+
+            json_response = json.loads(html)
+            if 'html' not in json_response:
+                raise Exception('The content type of url: {} is not html'.format(url))
+
+            html = json_response['html']
+            image = base64.b64decode(json_response['png'])
+            if not is_html_page_from_string(html):
+                raise Exception('The content type of url: {} is not html'.format(url))
+        else:
+            if 'text/html' not in r.headers['Content-Type']:
+                raise Exception('The content type of url: {} is {}'.format(url, r.headers['Content-Type']))
 
         if r.status_code not in ALLOW_STATUS_CODE:
             raise Exception('The status code of url: {} is {}'.format(url, r.status_code))
 
-        html = r.text
-
-        if splash:
-            json_response = json.loads(html)
-            html = json_response['html']
-            image = base64.b64decode(json_response['png'])
     except Exception as e:
         error = str(e)
         is_error = True
@@ -81,10 +91,6 @@ def extract_html(url, splash, splash_url):
 
 
 def download_html(urls_file, output_directory, is_splash_request_enable=False, splash_url=SPLASH_URL):
-    if not os.path.isfile(urls_file):
-        click.echo('The {} file does not exits.'.format(urls_file))
-        click.Context.exit(1)
-
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
 
@@ -121,7 +127,7 @@ def download_html(urls_file, output_directory, is_splash_request_enable=False, s
 
 
 @click.command(help=HELP, short_help=SHORT_HELP)
-@click.argument('urls_file')
+@click.argument('urls_file', type=click.Path(exists=True))
 @click.option('--output-directory', default=HTML_CLUSTER_DATA_DIRECTORY)
 @click.option('--splash-enabled/--no-splash-enabled', default=False)
 @click.option('--splash-url', default=SPLASH_URL)
