@@ -1,5 +1,3 @@
-# THIS REPO IS UNDER DEVELOPMENT
-
 # HTML Cluster
 
 [![Build Status](https://travis-ci.org/matiskay/html-cluster.svg?branch=master)](https://travis-ci.org/matiskay/html-cluster)
