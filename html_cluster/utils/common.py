@@ -11,7 +11,7 @@ def get_base_path(url):
     return urlparse(url).netloc
 
 
-def file_name(url):
+def get_file_name(url):
     return get_base_path(url) + '.' + make_id(url)
 
 
