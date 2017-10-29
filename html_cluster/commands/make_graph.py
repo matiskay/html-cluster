@@ -1,9 +1,10 @@
+import os
 import json
 
 import click
 
 
-def generate_graph(similarity_file, threshold=55):
+def generate_graph(similarity_file, threshold=85):
     edges = dict()
     hosts_used = set()
 
@@ -20,8 +21,6 @@ def generate_graph(similarity_file, threshold=55):
         hosts_used.add(host1)
         hosts_used.add(host2)
 
-        # TODO: Improve this part
-        # weight
         edges[host1, host2] = (score - threshold) / 2
 
     print('graph {')
@@ -37,8 +36,11 @@ def generate_graph(similarity_file, threshold=55):
     print()
 
     for host in hosts_used:
-        print('  "{host}" [label="{host}", image="{image_path}.png"]'.format(host=host, image_path=host.replace('.html', ''))) # NOQA
-
+        image_path = '{}.png'.format(host.replace('.html', ''))
+        if os.path.exists(image_path):
+            print('  "{host}" [label="{host}", image="{image_path}"]'.format(host=host, image_path=image_path)) # NOQA
+        else:
+            print('  "{host}" [label="{host}"]'.format(host=host))
     print('}')
 
 

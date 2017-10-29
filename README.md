@@ -31,7 +31,7 @@ html-cluster make-score-similarity-file --structural-weight=0.3
 3. Create the graph dot file
 
 ```
-html-cluster make-graph > graph.dot
+html-cluster make-graph similarity_score.json > graph.dot
 ```
 
 4. Render the image
